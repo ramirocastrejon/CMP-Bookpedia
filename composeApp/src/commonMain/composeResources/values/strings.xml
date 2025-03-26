@@ -6,6 +6,7 @@
     <string name="favorites">Favorites</string>
     <string name="no_search_results">Oops, no results found :(</string>
     <string name="no_favorite_books">You have no favorite books</string>
+    <string name="book_cover">Book Cover</string>
     <string name="rating">Rating</string>
     <string name="pages">Pages</string>
     <string name="languages">Languages</string>

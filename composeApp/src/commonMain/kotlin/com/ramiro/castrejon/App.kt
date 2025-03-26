@@ -20,6 +20,9 @@ import androidx.navigation.toRoute
 import com.ramiro.castrejon.app.Route
 import com.ramiro.castrejon.book.domain.Book
 import com.ramiro.castrejon.book.presentation.SelectedBookViewModel
+import com.ramiro.castrejon.book.presentation.book_detail.BookDetailAction
+import com.ramiro.castrejon.book.presentation.book_detail.BookDetailScreenRoot
+import com.ramiro.castrejon.book.presentation.book_detail.BookDetailViewModel
 import com.ramiro.castrejon.book.presentation.book_list.BookListScreenRoot
 import com.ramiro.castrejon.book.presentation.book_list.BookListViewModel
 
@@ -60,13 +63,21 @@ fun App() {
                 }
                 composable<Route.BookDetail> {
                     val selectedBookViewModel = it.sharedKoinViewModel<SelectedBookViewModel>(navController)
+                    val viewModel = koinViewModel<BookDetailViewModel>()
                     val selectedBook by selectedBookViewModel.selectedBook.collectAsStateWithLifecycle()
 
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center){
-                        Text(text = "Book details screen: The ID is ${selectedBook}")
+                    LaunchedEffect(selectedBook){
+                        selectedBook?.let {
+                            viewModel.onAction(BookDetailAction.OnSelectedBookChange(selectedBook!!))
+                        }
+
                     }
+                    BookDetailScreenRoot(
+                        viewModel = viewModel,
+                        onBackClick = {
+                            navController.navigateUp()
+                        }
+                    )
                 }
             }
         }
