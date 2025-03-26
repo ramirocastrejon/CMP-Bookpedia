@@ -5,7 +5,7 @@ import com.ramiro.castrejon.book.domain.Book
 
 fun SearchedBookDto.toBook(): Book {
     return Book(
-        id = id,
+        id = id.substringAfterLast("/"),
         title = title,
         authors = authorNames ?: emptyList(),
         imageUrl = if (coverKey != null) {

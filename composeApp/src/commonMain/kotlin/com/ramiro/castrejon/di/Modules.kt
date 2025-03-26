@@ -4,6 +4,7 @@ import com.ramiro.castrejon.book.data.network.KtorRemoteBookDataSource
 import com.ramiro.castrejon.book.data.network.RemoteBookDataSource
 import com.ramiro.castrejon.book.data.repository.DefaultBookRepository
 import com.ramiro.castrejon.book.domain.BookRepository
+import com.ramiro.castrejon.book.presentation.SelectedBookViewModel
 import com.ramiro.castrejon.book.presentation.book_list.BookListViewModel
 import com.ramiro.castrejon.core.data.HttpClientFactory
 import org.koin.core.module.Module
@@ -20,4 +21,5 @@ val sharedModule = module {
     singleOf(::DefaultBookRepository).bind<BookRepository>()
 
     viewModelOf(::BookListViewModel)
+    viewModelOf(::SelectedBookViewModel)
 }
