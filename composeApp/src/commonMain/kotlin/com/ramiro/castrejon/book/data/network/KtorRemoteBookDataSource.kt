@@ -1,5 +1,6 @@
 package com.ramiro.castrejon.book.data.network
 
+import com.ramiro.castrejon.book.data.dto.BookWorkDto
 import com.ramiro.castrejon.book.data.dto.SearchResponseDto
 import com.ramiro.castrejon.book.domain.Book
 import com.ramiro.castrejon.core.data.safeCall
@@ -16,7 +17,7 @@ class KtorRemoteBookDataSource(
         query: String,
         resultLimit: Int?
     ): Result<SearchResponseDto, DataError.Remote>{
-        return safeCall {
+        return safeCall<SearchResponseDto> {
             httpClient.get(
                 urlString = "https://openlibrary.org/search.json"
             ){
@@ -24,6 +25,16 @@ class KtorRemoteBookDataSource(
                 parameter("limit", resultLimit)
                 parameter("language", "eng")
                 parameter("fields", "key,title,language,cover_i,author_key,author_name,cover_edition_key,first_publish_year,ratings_average,ratings_count,number_of_pages_median,edition_count")
+            }
+        }
+    }
+
+    override suspend fun getBookDetails(bookWorkId: String): Result<BookWorkDto, DataError.Remote> {
+        return safeCall<BookWorkDto> {
+            httpClient.get(
+                urlString = "https://openlibrary.org/works/$bookWorkId.json"
+            ) {
+
             }
         }
     }
