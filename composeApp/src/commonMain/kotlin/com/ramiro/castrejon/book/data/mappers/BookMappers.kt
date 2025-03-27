@@ -1,5 +1,6 @@
 package com.ramiro.castrejon.book.data.mappers
 
+import com.ramiro.castrejon.book.data.database.BookEntity
 import com.ramiro.castrejon.book.data.dto.SearchedBookDto
 import com.ramiro.castrejon.book.domain.Book
 
@@ -20,5 +21,37 @@ fun SearchedBookDto.toBook(): Book {
         numPages = numPagesMedian,
         numEditions = editionCount ?: 0,
         ratingCount = ratingsCount
+    )
+}
+
+fun Book.toBookEntity(): BookEntity {
+    return BookEntity(
+        id = id,
+        title = title,
+        imageUrl = imageUrl,
+        authors = authors,
+        description = description,
+        languages = languages,
+        firstPublishYear = firstPublishYear,
+        averageRating = averageRating,
+        ratingCount = ratingCount,
+        numPages = numPages,
+        numEditions = numEditions
+    )
+}
+
+fun BookEntity.toBook(): Book {
+    return Book(
+        id = id,
+        title = title,
+        imageUrl = imageUrl,
+        authors = authors,
+        description = description,
+        languages = languages,
+        firstPublishYear = firstPublishYear,
+        averageRating = averageRating,
+        ratingCount = ratingCount,
+        numPages = numPages,
+        numEditions = numEditions
     )
 }
