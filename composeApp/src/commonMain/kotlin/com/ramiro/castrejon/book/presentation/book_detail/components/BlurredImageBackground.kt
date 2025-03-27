@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -46,6 +47,7 @@ import cocktailprojectcmp.composeapp.generated.resources.go_back
 import cocktailprojectcmp.composeapp.generated.resources.mark_as_favorite
 import cocktailprojectcmp.composeapp.generated.resources.remove_from_favorites
 import coil3.compose.rememberAsyncImagePainter
+import com.ramiro.castrejon.core.presentation.PulseAnimation
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -126,7 +128,11 @@ fun BlurredImagedBackground(
                     targetState = imageLoadResult
                 ) {result ->
                     when(result){
-                        null -> CircularProgressIndicator()
+                        null -> Box(modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center) {
+                            PulseAnimation(
+                                modifier = Modifier.size(60.dp))
+                        }
                         else -> {
                             Box {
                                 Image(

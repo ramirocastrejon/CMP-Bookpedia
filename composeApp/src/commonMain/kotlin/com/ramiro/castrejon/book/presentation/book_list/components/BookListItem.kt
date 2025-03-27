@@ -1,5 +1,7 @@
 package com.ramiro.castrejon.book.presentation.book_list.components
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -30,14 +32,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cocktailprojectcmp.composeapp.generated.resources.Res
 import cocktailprojectcmp.composeapp.generated.resources.book_error
+import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import com.ramiro.castrejon.book.domain.Book
+import com.ramiro.castrejon.core.presentation.PulseAnimation
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.round
 
@@ -80,15 +86,30 @@ fun BookListItem(
                     }
                 )
 
+                val painterState by painter.state.collectAsStateWithLifecycle()
+                val transition by animateFloatAsState(
+                    targetValue = if(painterState is AsyncImagePainter.State.Success) {
+                        1f
+                    } else 0f,
+                    animationSpec = tween(delayMillis = 800)
+                )
+
                 when(val result = imageLoadResult){
-                    null -> CircularProgressIndicator()
+                    null -> PulseAnimation(
+                        modifier = Modifier.size(60.dp)
+                    )
                     else -> {
                         Image(painter = if (result.isSuccess) painter else painterResource(Res.drawable.book_error),
                             contentDescription = book.title,
                             contentScale = if (result.isSuccess){
                                 ContentScale.Crop
                             } else ContentScale.Fit,
-                            modifier = Modifier.aspectRatio(ratio = 0.65f, matchHeightConstraintsFirst = true))
+                            modifier = Modifier.aspectRatio(ratio = 0.65f, matchHeightConstraintsFirst = true).graphicsLayer {
+                                rotationX = (1f - transition) * 30f
+                                val scale = 0.8f + (0.2f * transition)
+                                scaleX = scale
+                                scaleY = scale
+                            })
                     }
                 }
             }
